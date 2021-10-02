@@ -5,8 +5,12 @@
 char alternate_special_chars[] = {'%','c','d','e','f','g','i','o','s','u','x','\0'};
 
 // we're aiming for something like this below for _printf:
-// _printf("In %d years, %d citizens will migrate from %s", years, migrants, country);
-// outout: In 3 years, 781 citizens will migrate from Florida
+// _printf("Option %c: In %d years, %d citizens will migrate from %s",option, years, migrants, country);
+// option:     'B'      (char)
+// years:       3       (int)
+// migrants:    781     (int)
+// country:     "Florida" (string)
+// outout: Option B: In 3 years, 781 citizens will migrate from Florida
 // ------------------------------------------------------
 
 // function to return true if the character c is in the string else false
@@ -77,6 +81,18 @@ int _printf(const char *string, ...)
     in the variable arguments. Return the corresponding type from va_arg 
     according to the corresponding formaat specifier. Append the interpreted forms
     of the variable in each case into a single string.*/
+
+    va_list arg_ptr; // create a pointer to the variable arguments
+    va_start(arg_ptr, n_specifiers); // initialize arg_ptr with the number of valid formatters in the string
+
+    // using this as a guide:
+    // _printf("Option %c: In %d years, %d citizens will migrate from %s",option, years, migrants, country);
+    // outout: Option B: In 3 years, 781 citizens will migrate from Florida
+
+
+
+
+
 
     return 0; // TODO: return number of characters printed instead
 }
