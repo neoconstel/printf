@@ -69,6 +69,53 @@ int count_valid_formatters(const char *string, ...)
     return format_specifiers;
 }
 
+
+int printnum_as_chars(long n){
+    
+    bool is_negative;
+
+    // something to store the number length
+    int characters_printed = 0;
+
+    //ensure we are working with the absolute value of the number
+    is_negative = n < 0? true:false;
+    if (is_negative)
+        n *= -1;
+    
+    // get divisor
+    unsigned long divisor = 1;
+    while(n >= divisor * 10){
+        divisor *= 10;
+        // characters_printed++;
+    }
+    
+    //divisor_10 = divisor * 10
+    unsigned long divisor_10 = divisor * 10;
+    
+    // print '-' sign if the number (before it was converted to absolute form) is negative
+    if (is_negative) {
+        putchar('-');
+        characters_printed++;
+    }
+
+    // get/print digits, starting from highest value(4)
+    int digit;
+    int i = 0; //for storing the character form of the digit at index position of the buffer    
+    do{
+        digit = (n % divisor_10 - n % divisor) / divisor;            
+        // print character equivalent of digit
+        putchar('0' + digit);
+        characters_printed++;
+           
+        divisor /= 10;
+        divisor_10 /= 10;
+    }while(divisor >= 1);           
+    
+    return characters_printed;
+}
+
+
+
 int _printf(const char *string, ...)
 {
     // first count how many VALID format specifiers (how many valid opening '%' are closed with an alternate special charater )
