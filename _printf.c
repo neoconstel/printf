@@ -78,6 +78,7 @@ int _printf(const char *string, ...)
     according to the corresponding formaat specifier. Append the interpreted forms
     of the variable in each case into a single string.*/
 
+    return 0; // TODO: return number of characters printed instead
 }
 
 int main(void)
