@@ -1,6 +1,5 @@
 #include <unistd.h>
 #include <stdarg.h>
-#include <stdbool.h>
 
 
 char alternate_special_chars[] = {'%','c','d','e','f','g','i','o','s','u','x','\0'};
@@ -14,16 +13,16 @@ char alternate_special_chars[] = {'%','c','d','e','f','g','i','o','s','u','x','\
 // output: Option B: In 3 years, 781 citizens will migrate from Florida
 // ------------------------------------------------------
 
-// function to return true if the character c is in the string else false
-bool isin(char *string, const char c)
+// function to return 1 if the character c is in the string else 0
+int isin(char *string, const char c)
 {
     int i = 0;
     while (string[i] != '\0')
     {
         if (c == string[i++])
-            return true;
+            return 1;
     }
-    return false;      
+    return 0;      
 }
 
 
@@ -38,27 +37,27 @@ int count_valid_formatters(const char *string, ...)
     //      "The girl named % z  s was sent from the class" (any character not in our list of alternate special characters terminates the open '%)
 
     int format_specifiers = 0;
-    bool format_flag = false;   //true if % is 'open', and closed by any matching character from the alternate special characters list. E.g %c, %d or %%
+    int format_flag = 0;   //1 if % is 'open', and closed by any matching character from the alternate special characters list. E.g %c, %d or %%
     int i = 0;
 
     while (string[i] != '\0') // while we aren't yet at the end of the string
     {
         // if the current character is not a space and is not in our list of alternate special characters
         if (string[i] !=' ' && !(isin(alternate_special_chars, string[i]) ) ){
-            format_flag = false;
+            format_flag = 0;
         }            
 
-        // else if current character is '%' and the format flag is false
-        else if ( string[i] == '%' && format_flag == false )
+        // else if current character is '%' and the format flag is 0
+        else if ( string[i] == '%' && format_flag == 0 )
         {
-            format_flag = true;
+            format_flag = 1;
         }
         
-        // else if current character is in our list of alternate special characters and the format flag is true
-        else if ( isin(alternate_special_chars, string[i]) && format_flag == true )
+        // else if current character is in our list of alternate special characters and the format flag is 1
+        else if ( isin(alternate_special_chars, string[i]) && format_flag == 1 )
         {
             format_specifiers++;
-            format_flag = false;
+            format_flag = 0;
         }
 
         else
@@ -73,14 +72,14 @@ int count_valid_formatters(const char *string, ...)
 
 int printnum_as_chars(long n){
     
-    bool is_negative;
+    int is_negative;
     char character[1];
 
     // something to store the number length
     int characters_printed = 0;
 
     //ensure we are working with the absolute value of the number
-    is_negative = n < 0? true:false;
+    is_negative = n < 0? 1:0;
     if (is_negative)
         n *= -1;
     
@@ -147,29 +146,29 @@ int _printf(const char *string, ...)
 
 
     // the algorithm:
-    // PARSE THROUGH THE STRING STARTING FROM INDEX 0. all flags initially false.
+    // PARSE THROUGH THE STRING STARTING FROM INDEX 0. all flags initially 0.
     // get current character at string index
 
-    // if format_flag == false and char not '%':
+    // if format_flag == 0 and char not '%':
         // print the current character
 
-    // else if format_flag == false and current char == '%':
-        // format_flag = true
+    // else if format_flag == 0 and current char == '%':
+        // format_flag = 1
 
-    // else if format_flag == true and current character == white_space:
-        // white_space_flag = true
+    // else if format_flag == 1 and current character == white_space:
+        // white_space_flag = 1
 
-    // else if format_flag == true and current character not in alternate special characters:
-        // format_flag = false
+    // else if format_flag == 1 and current character not in alternate special characters:
+        // format_flag = 0
         // print '%'
-        // if white_space_flag == true:
+        // if white_space_flag == 1:
             // print a single whitespace
-            // white_space_flag = false
+            // white_space_flag = 0
         // print the current character
     
-    // else if format_flag == true and current character in alternate special characters:
-        // format_flag = false
-        // white_space_flag = false
+    // else if format_flag == 1 and current character in alternate special characters:
+        // format_flag = 0
+        // white_space_flag = 0
         // --PRINT ACTUAL VALUE. this means:--
         // if current character == '%':
             // print '%'
@@ -182,46 +181,46 @@ int _printf(const char *string, ...)
 
 
     // IMPLEMENTATION
-    // PARSE THROUGH THE STRING STARTING FROM INDEX 0. all flags initially false.
+    // PARSE THROUGH THE STRING STARTING FROM INDEX 0. all flags initially 0.
     int i = 0;
-    bool format_flag = false;
-    bool whitespace_flag = false;
+    int format_flag = 0;
+    int whitespace_flag = 0;
     char character[1];
     int total_characters = 0;
 
-    while(true){
+    while(1){
 
-    if (format_flag == false && string[i] != '%'){
+    if (format_flag == 0 && string[i] != '%'){
         character[0] = string[i];
         write(1, character, 1);
         total_characters++;
         }
 
-    else if (format_flag == false && string[i] == '%')
-        format_flag = true;
+    else if (format_flag == 0 && string[i] == '%')
+        format_flag = 1;
 
-    else if (format_flag == true && string[i] == ' ')
-        whitespace_flag = true;
+    else if (format_flag == 1 && string[i] == ' ')
+        whitespace_flag = 1;
 
-    else if ( (format_flag == true) && !(isin(alternate_special_chars, string[i])) ){
-        format_flag = false;
+    else if ( (format_flag == 1) && !(isin(alternate_special_chars, string[i])) ){
+        format_flag = 0;
         character[0] = '%';
         write(1, character, 1);
         total_characters++;
-        if (whitespace_flag == true){
+        if (whitespace_flag == 1){
             character[0] = ' ';
             write(1, character, 1);
             total_characters++;
-            whitespace_flag = false;
+            whitespace_flag = 0;
         }
         character[0] = string[i];
         write(1, character, 1);
         total_characters++;
     }
     
-    else if (format_flag == true && isin(alternate_special_chars, string[i])){
-        format_flag = false;
-        whitespace_flag = false;
+    else if (format_flag == 1 && isin(alternate_special_chars, string[i])){
+        format_flag = 0;
+        whitespace_flag = 0;
         // --PRINT ACTUAL VALUE OF FORMAT SPECIFIER--
         if (string[i] == '%'){
             character[0] = '%';
