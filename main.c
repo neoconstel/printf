@@ -127,7 +127,7 @@ int _printf(const char *string, ...)
     /*Next steps: tap into the variable arguments and alternate between the format
     specifiers in the first(string) argument and the corresponding variables
     in the variable arguments. Return the corresponding type from va_arg 
-    according to the corresponding formaat specifier. Append the interpreted forms
+    according to the corresponding format specifier. Append the interpreted forms
     of the variable in each case into a single string OR (as is being currently
     implemented) -- print directly*/
 
@@ -178,16 +178,72 @@ int _printf(const char *string, ...)
             // fetch argument from arg_ptr as an int, and print it using the printnum_as_chars() function
 
 
+    // IMPLEMENTATION
+    // PARSE THROUGH THE STRING STARTING FROM INDEX 0. all flags initially false.
+    int i = 0;
+    bool format_flag = false;
+    bool whitespace_flag = false;
 
+    while(string[i] != '\0'){
 
+    if (format_flag == false && string[i] != '%')
+        putchar(string[i]);
 
+    else if (format_flag == false && string[i] == '%')
+        format_flag = true;
 
+    else if (format_flag == true && string[i] == ' ')
+        whitespace_flag = true;
 
+    else if ( (format_flag == true) && !(isin(alternate_special_chars, string[i])) ){
+        format_flag = false;
+        putchar('%');
+        if (whitespace_flag == true){
+            putchar(' ');
+            whitespace_flag = false;
+        }
+        putchar(string[i]);
+    }
+    
+    else if (format_flag == true && isin(alternate_special_chars, string[i])){
+        format_flag = false;
+        whitespace_flag = false;
+        // --PRINT ACTUAL VALUE OF FORMAT SPECIFIER--
+        if (string[i] == '%')
+            putchar('%');
+        else if (string[i] == 'c')
+            // fetch argument from arg_ptr as a char type, and print it
+            putchar(va_arg(arg_ptr, int));
+        else if (string[i] == 's')
+            // fetch argument from arg_ptr as a char* type, and print it
+            puts(va_arg(arg_ptr, char*));
+        else if (string[i] == 'd')
+            // fetch argument from arg_ptr as an int, and print it using the printnum_as_chars() function
+            printnum_as_chars(va_arg(arg_ptr, int));
+        
+        }
+
+        i++;
+    }
+
+    va_end(arg_ptr);
 
     return 0; // TODO: return number of characters printed instead
 }
 
 int main(void)
 {
-    
+    // _printf("Option %c: In %d years, %d citizens will migrate from %s",option, years, migrants, country);
+    // option:     'B'      (char)
+    // years:       3       (int)
+    // migrants:    781     (int)
+    // country:     "Florida" (string)
+    // expected output: Option B: In 3 years, 781 citizens will migrate from Florida
+
+    char option = 'B';
+    int years = 3;
+    int migrants = 781;
+    char *country = "Florida";
+    _printf("Option %c: In %d years, %d citizens will migrate from %s",option, years, migrants, country);
+
 }
