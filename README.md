@@ -1,8 +1,8 @@
 # printf implementation
 
 ## Milestones
-- _printf function working as expected: Prints a string and used the format
-specifiers to interpret it into its appropriate string by fetching the 
+- _printf function working as expected: Prints a string and uses the format
+specifiers to interpret it into its appropriate string value by fetching the 
 corresponding vaue from the variable arguments.
 
 ## TODOs
