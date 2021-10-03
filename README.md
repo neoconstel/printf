@@ -10,6 +10,8 @@ corresponding vaue from the variable arguments.
 
 - replace putchar() with write() completely
 
+- _printf returns the number of characters printed
+
 
 ## TODOs
 - remove the main function
@@ -19,5 +21,4 @@ corresponding vaue from the variable arguments.
 - if required, reduce number of functions
  
 - tuck global variables into functions
- 
-- _printf should return the number of characters printed
+

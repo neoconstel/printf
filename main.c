@@ -187,12 +187,14 @@ int _printf(const char *string, ...)
     bool format_flag = false;
     bool whitespace_flag = false;
     char character[1];
+    int total_characters = 0;
 
     while(string[i] != '\0'){
 
     if (format_flag == false && string[i] != '%'){
         character[0] = string[i];
         write(1, character, 1);
+        total_characters++;
         }
 
     else if (format_flag == false && string[i] == '%')
@@ -205,13 +207,16 @@ int _printf(const char *string, ...)
         format_flag = false;
         character[0] = '%';
         write(1, character, 1);
+        total_characters++;
         if (whitespace_flag == true){
             character[0] = ' ';
             write(1, character, 1);
+            total_characters++;
             whitespace_flag = false;
         }
         character[0] = string[i];
         write(1, character, 1);
+        total_characters++;
     }
     
     else if (format_flag == true && isin(alternate_special_chars, string[i])){
@@ -221,11 +226,13 @@ int _printf(const char *string, ...)
         if (string[i] == '%'){
             character[0] = '%';
             write(1, character, 1);
+            total_characters++;
         }
         else if (string[i] == 'c'){
             // fetch argument from arg_ptr as a char type, and print it
             character[0] = va_arg(arg_ptr, int);
             write(1, character, 1);
+            total_characters++;
         }
         else if (string[i] == 's'){
             // fetch argument from arg_ptr as a char* type, and print it
@@ -234,10 +241,11 @@ int _printf(const char *string, ...)
             for (; string_arg[string_length] != '\0'; string_length++ )
                 ;
             write(1, string_arg, string_length );
+            total_characters += string_length;
         }
         else if (string[i] == 'd')
             // fetch argument from arg_ptr as an int, and print it using the printnum_as_chars() function
-            printnum_as_chars(va_arg(arg_ptr, int));
+            total_characters += printnum_as_chars(va_arg(arg_ptr, int));
         
         }
 
@@ -246,7 +254,7 @@ int _printf(const char *string, ...)
 
     va_end(arg_ptr);
 
-    return 0; // TODO: return number of characters printed instead
+    return total_characters;
 }
 
 int main(void)
@@ -263,5 +271,4 @@ int main(void)
     int migrants = 781;
     char *country = "Florida";
     _printf("Option %c: In %d years, %d citizens will migrate from %s",option, years, migrants, country);
-
 }
