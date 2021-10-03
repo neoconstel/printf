@@ -1,4 +1,4 @@
-# printf implementation
+# printf implementation (language: C)
 The goal is to implement a custom printf function, called _printf, which can 
 print variables in string format according to the directive of the format 
 specifiers (%d, %c, %s etcetera).
