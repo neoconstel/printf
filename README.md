@@ -9,3 +9,5 @@ TODO: replace putchar() with write() completely
 TODO: if required, reduce number of functions
 
 TODO: tuck global variables into functions
+
+TODO: _printf should return the number of characters printed
