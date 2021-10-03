@@ -10,7 +10,7 @@ char alternate_special_chars[] = {'%','c','d','e','f','g','i','o','s','u','x','\
 // years:       3       (int)
 // migrants:    781     (int)
 // country:     "Florida" (string)
-// outout: Option B: In 3 years, 781 citizens will migrate from Florida
+// output: Option B: In 3 years, 781 citizens will migrate from Florida
 // ------------------------------------------------------
 
 // function to return true if the character c is in the string else false
@@ -127,14 +127,56 @@ int _printf(const char *string, ...)
     specifiers in the first(string) argument and the corresponding variables
     in the variable arguments. Return the corresponding type from va_arg 
     according to the corresponding formaat specifier. Append the interpreted forms
-    of the variable in each case into a single string.*/
+    of the variable in each case into a single string OR (as is being currently
+    implemented) -- print directly*/
 
     va_list arg_ptr; // create a pointer to the variable arguments
     va_start(arg_ptr, n_specifiers); // initialize arg_ptr with the number of valid formatters in the string
 
     // using this as a guide:
     // _printf("Option %c: In %d years, %d citizens will migrate from %s",option, years, migrants, country);
-    // outout: Option B: In 3 years, 781 citizens will migrate from Florida
+    // output: Option B: In 3 years, 781 citizens will migrate from Florida
+
+    // how printf behaves:
+    // "stuff%         otherstuff" --prints--> "stuff% otherstuff" (an unclosed format specifier with infinite whitespace between translates to '%' and a single whitespace)
+    // "stuff%      sotherstuff"   --prints--> "stuffSTRINGotherstuff" (a closed format specifier replaces everything from opening to closing format specifier -- with the variable meant to be there)
+
+
+    // the algorithm:
+    // PARSE THROUGH THE STRING STARTING FROM INDEX 0. all flags initially false.
+    // get current character at string index
+
+    // if format_flag == false and char not '%':
+        // print the current character
+
+    // else if format_flag == false and current char == '%':
+        // format_flag = true
+
+    // else if format_flag == true and current character == white_space:
+        // white_space_flag = true
+
+    // else if format_flag == true and current character not in alternate special characters:
+        // format_flag = false
+        // print '%'
+        // if white_space_flag == true:
+            // print a single whitespace
+            // white_space_flag = false
+        // print the current character
+    
+    // else if format_flag == true and current character in alternate special characters:
+        // format_flag = false
+        // white_space_flag = false
+        // --PRINT ACTUAL VALUE. this means:--
+        // if current character == '%':
+            // print '%'
+        // else if current character == 'c':
+            // fetch argument from arg_ptr as a char type, and print it
+        // else if current character == 's':
+            // fetch argument from arg_ptr as a char* type, and print it
+        // else if current character == 'd':
+            // fetch argument from arg_ptr as an int, and print it using the printnum_as_chars() function
+
+
 
 
 
@@ -146,14 +188,5 @@ int _printf(const char *string, ...)
 
 int main(void)
 {
-    // testing number of string formatters found
-    char *string1 = "%"; //single opening '%', no closing character = 0 valid specifiers
-    char *string2 = "%%%%%%"; //3 sequences of opening/closing '%' = 3 valid specifiers
-    char *string3 = "stuff %c %d stuff %z %j %99"; // 2 valid specifiers (%c and %d). Because z, j and 9 are not included in our list of alternate special characters.
-    char *string4 = "% z %d %  s stuff"; // Total = 2 valid specifiers => First opening '%' terminated by z(which is not in alternate special characters). %d is valid (1 count). %  s is valid, since whitespace does not terminate the open '%'. 
-
-    printf("Formatters in string 1: %d\n", count_valid_formatters(string1));
-    printf("Formatters in string 2: %d\n", count_valid_formatters(string2));
-    printf("Formatters in string 3: %d\n", count_valid_formatters(string3));
-    printf("Formatters in string 4: %d\n", count_valid_formatters(string4));
+    
 }
