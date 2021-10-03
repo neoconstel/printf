@@ -189,7 +189,7 @@ int _printf(const char *string, ...)
     char character[1];
     int total_characters = 0;
 
-    while(string[i] != '\0'){
+    while(true){
 
     if (format_flag == false && string[i] != '%'){
         character[0] = string[i];
@@ -249,6 +249,9 @@ int _printf(const char *string, ...)
         
         }
 
+        if (string[i] == '\0')
+            break;
+
         i++;
     }
 
@@ -270,5 +273,6 @@ int main(void)
     int years = 3;
     int migrants = 781;
     char *country = "Florida";
-    _printf("Option %c: In %d years, %d citizens will migrate from %s",option, years, migrants, country);
+    _printf("Option %c: In %d years, %d citizens will migrate from %s\n",option, years, migrants, country);
+    _printf("%");
 }
