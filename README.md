@@ -1,4 +1,4 @@
-# Custom printf
+# printf implementation
 
 TODO: remove the main function
 
