@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <unistd.h>
 #include <stdarg.h>
 #include <stdbool.h>
 
@@ -74,6 +74,7 @@ int count_valid_formatters(const char *string, ...)
 int printnum_as_chars(long n){
     
     bool is_negative;
+    char character[1];
 
     // something to store the number length
     int characters_printed = 0;
@@ -95,7 +96,8 @@ int printnum_as_chars(long n){
     
     // print '-' sign if the number (before it was converted to absolute form) is negative
     if (is_negative) {
-        putchar('-');
+        character[0] = '-';
+        write(1, character, 1);
         characters_printed++;
     }
 
@@ -105,7 +107,8 @@ int printnum_as_chars(long n){
     do{
         digit = (n % divisor_10 - n % divisor) / divisor;            
         // print character equivalent of digit
-        putchar('0' + digit);
+        character[0] = '0' + digit;
+        write(1, character, 1);
         characters_printed++;
            
         divisor /= 10;
@@ -183,11 +186,14 @@ int _printf(const char *string, ...)
     int i = 0;
     bool format_flag = false;
     bool whitespace_flag = false;
+    char character[1];
 
     while(string[i] != '\0'){
 
-    if (format_flag == false && string[i] != '%')
-        putchar(string[i]);
+    if (format_flag == false && string[i] != '%'){
+        character[0] = string[i];
+        write(1, character, 1);
+        }
 
     else if (format_flag == false && string[i] == '%')
         format_flag = true;
@@ -197,26 +203,38 @@ int _printf(const char *string, ...)
 
     else if ( (format_flag == true) && !(isin(alternate_special_chars, string[i])) ){
         format_flag = false;
-        putchar('%');
+        character[0] = '%';
+        write(1, character, 1);
         if (whitespace_flag == true){
-            putchar(' ');
+            character[0] = ' ';
+            write(1, character, 1);
             whitespace_flag = false;
         }
-        putchar(string[i]);
+        character[0] = string[i];
+        write(1, character, 1);
     }
     
     else if (format_flag == true && isin(alternate_special_chars, string[i])){
         format_flag = false;
         whitespace_flag = false;
         // --PRINT ACTUAL VALUE OF FORMAT SPECIFIER--
-        if (string[i] == '%')
-            putchar('%');
-        else if (string[i] == 'c')
+        if (string[i] == '%'){
+            character[0] = '%';
+            write(1, character, 1);
+        }
+        else if (string[i] == 'c'){
             // fetch argument from arg_ptr as a char type, and print it
-            putchar(va_arg(arg_ptr, int));
-        else if (string[i] == 's')
+            character[0] = va_arg(arg_ptr, int);
+            write(1, character, 1);
+        }
+        else if (string[i] == 's'){
             // fetch argument from arg_ptr as a char* type, and print it
-            puts(va_arg(arg_ptr, char*));
+            char *string_arg = va_arg(arg_ptr, char*);
+            int string_length = 0;
+            for (; string_arg[string_length] != '\0'; string_length++ )
+                ;
+            write(1, string_arg, string_length );
+        }
         else if (string[i] == 'd')
             // fetch argument from arg_ptr as an int, and print it using the printnum_as_chars() function
             printnum_as_chars(va_arg(arg_ptr, int));
