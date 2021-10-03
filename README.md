@@ -8,7 +8,7 @@ specifiers (%d, %c, %s etcetera).
 specifiers to interpret it into its appropriate string value by fetching the 
 corresponding vaue from the variable arguments.
 
-- replace putchar() with write() completely
+- replaced putchar() with write() completely
 
 - _printf returns the number of characters printed
 
