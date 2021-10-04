@@ -2,16 +2,18 @@
 #include <stdarg.h>
 
 
-char alternate_special_chars[] = {'%','c','d','e','f','g','i','o','s','u','x','\0'};
 
-// we're aiming for something like this below for _printf:
-// _printf("Option %c: In %d years, %d citizens will migrate from %s",option, years, migrants, country);
-// option:     'B'      (char)
-// years:       3       (int)
-// migrants:    781     (int)
-// country:     "Florida" (string)
-// output: Option B: In 3 years, 781 citizens will migrate from Florida
-// ------------------------------------------------------
+/*
+* we're aiming for something like this below for _printf:
+* _printf("Option %c: In %d years, %d citizens will migrate from %s",
+                                            option, years, migrants, country);
+* option:     'B'      (char)
+* years:       3       (int)
+* migrants:    781     (int)
+* country:     "Florida" (string)
+* output: Option B: In 3 years, 781 citizens will migrate from Florida
+* ------------------------------------------------------
+*/
 
 // function to return 1 if the character c is in the string else 0
 int isin(char *string, const char c)
@@ -36,6 +38,7 @@ int count_valid_formatters(const char *string, ...)
     // But this is not valid:
     //      "The girl named % z  s was sent from the class" (any character not in our list of alternate special characters terminates the open '%)
 
+    char alternate_special_chars[] = {'%','c','d','e','f','g','i','o','s','u','x'};
     int format_specifiers = 0;
     int format_flag = 0;   //1 if % is 'open', and closed by any matching character from the alternate special characters list. E.g %c, %d or %%
     int i = 0;
@@ -123,6 +126,7 @@ int _printf(const char *string, ...)
 {
     // first count how many VALID format specifiers (how many valid opening '%' are closed with an alternate special charater )
     // so we can use it to initialize the argument pointer later on (via va_start)
+    char alternate_special_chars[] = {'%','c','d','e','f','g','i','o','s','u','x'};
     int n_specifiers = count_valid_formatters(string);
 
 
@@ -190,7 +194,7 @@ int _printf(const char *string, ...)
 
     while(1){
 
-    if (format_flag == 0 && string[i] != '%'){
+    if (format_flag == 0 && string[i] != '%' && string[i] != '\0'){
         character[0] = string[i];
         write(1, character, 1);
         total_characters++;
@@ -213,9 +217,13 @@ int _printf(const char *string, ...)
             total_characters++;
             whitespace_flag = 0;
         }
+
+        // only write the non-special-character if it is not the null terminator
+        if (string[i] != '\0') {
         character[0] = string[i];
         write(1, character, 1);
         total_characters++;
+        }
     }
     
     else if (format_flag == 1 && isin(alternate_special_chars, string[i])){

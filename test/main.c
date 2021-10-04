@@ -32,4 +32,5 @@ int main(void)
     char *country = "Florida";
     _printf("Option %c: In %d years, %d citizens will migrate from %s\n",option, years, migrants, country);
     _printf("%");
+    _printf("apple");
 }
