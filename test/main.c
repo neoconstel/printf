@@ -15,6 +15,7 @@
 
 // go to previous (..) directory (project root directory) and include main.h
 #include "../main.h"
+#include <stdio.h>
 
 
 int main(void)
@@ -30,7 +31,9 @@ int main(void)
     int years = 3;
     int migrants = 781;
     char *country = "Florida";
+    printf("Should come first");
     _printf("Option %c: In %d years, %d citizens will migrate from %s\n",option, years, migrants, country);
     _printf("%");
     _printf("apple");
+    printf("Should come last");
 }

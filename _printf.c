@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 
+#include <stdio.h> //testing something
 
 
 /*
@@ -124,6 +125,8 @@ int printnum_as_chars(long n){
 
 int _printf(const char *string, ...)
 {
+    fflush(stdout); // a test
+
     // first count how many VALID format specifiers (how many valid opening '%' are closed with an alternate special charater )
     // so we can use it to initialize the argument pointer later on (via va_start)
     char alternate_special_chars[] = {'%','c','d','e','f','g','i','o','s','u','x'};
