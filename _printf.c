@@ -259,19 +259,3 @@ int _printf(const char *string, ...)
     return total_characters;
 }
 
-int main(void)
-{
-    // _printf("Option %c: In %d years, %d citizens will migrate from %s",option, years, migrants, country);
-    // option:     'B'      (char)
-    // years:       3       (int)
-    // migrants:    781     (int)
-    // country:     "Florida" (string)
-    // expected output: Option B: In 3 years, 781 citizens will migrate from Florida
-
-    char option = 'B';
-    int years = 3;
-    int migrants = 781;
-    char *country = "Florida";
-    _printf("Option %c: In %d years, %d citizens will migrate from %s\n",option, years, migrants, country);
-    _printf("%");
-}

@@ -12,13 +12,20 @@ corresponding vaue from the variable arguments.
 
 - _printf returns the number of characters printed
 
+- placed functions into header file (main.h) and removed the main() function 
+from _printf.c
+
 
 ## TODOs
-- remove the main function
- 
-- separate functions into header files
- 
+
 - if required, reduce number of functions
  
 - tuck global variables into functions
+
+
+## HOW WE WILL DO THE TESTS:
+- navigate to the directory "test" and run: gcc main.c ../_printf.c -o testrun
+This creates an executable named "testrun" in the directory "test"
+
+- run this executable using: ./testrun    to see the output.
 
