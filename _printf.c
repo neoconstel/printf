@@ -250,7 +250,7 @@ int _printf(const char *string, ...)
             write(1, string_arg, string_length );
             total_characters += string_length;
         }
-        else if (string[i] == 'd')
+        else if (string[i] == 'd' || string[i] == 'i')
             // fetch argument from arg_ptr as an int, and print it using the printnum_as_chars() function
             total_characters += printnum_as_chars(va_arg(arg_ptr, int));
         
